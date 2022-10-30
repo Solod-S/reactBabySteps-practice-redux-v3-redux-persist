@@ -2,6 +2,19 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createAction, createReducer, createSlice } from '@reduxjs/toolkit';
 import { userSlice } from './userSlice';
 import { clickSlice } from './userSliceReduxPersist';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+
+const persistConfig = {
+  key: 'clicks',
+  storage,
+  // blacklist: ['clicks'],
+  // если хочу исключить store.reducer.click
+  //whitelist: ['clicks']
+  // если хочу сохранять только store.reducer.click
+};
+
+const persisteClickdReducer = persistReducer(persistConfig, clickSlice.reducer);
 
 const myValueSlice = createSlice({
   name: 'myValueSlice',
@@ -71,7 +84,9 @@ export const store = configureStore({
     items: myItems,
     itemSlice: myItemSlice.reducer,
     userSlice: userSlice.reducer,
-    click: clickSlice.reducer,
+    click: persisteClickdReducer,
   },
 });
 // за свойство myValue отвечает редюсер myReducer
+
+export const persistor = persistStore(store);

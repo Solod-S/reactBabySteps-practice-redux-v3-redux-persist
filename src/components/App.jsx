@@ -1,6 +1,7 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from 'components/Layout/Layout';
 import { LoginPage, DashbordPage } from 'Pages';
+
 export const App = () => {
   return (
     <Routes>
