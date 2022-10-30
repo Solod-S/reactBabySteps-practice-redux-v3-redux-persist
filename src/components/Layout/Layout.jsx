@@ -7,10 +7,12 @@ import {
   incrementMySlice,
   decrementMySlice,
 } from 'redux/store';
-
+import { update } from 'redux/userSliceReduxPersist';
 const Layout = () => {
   const dispatch = useDispatch();
   const value = useSelector(state => state.myValue);
+  const storeClics = useSelector(state => state.click.clicks);
+  console.log(`storeClics`, storeClics);
   const valueSlice = useSelector(state => state.myValueSlice);
   console.log('layout', value);
 
@@ -46,6 +48,19 @@ const Layout = () => {
         <button onClick={() => dispatch(decrementMySlice(2))}>decrement</button>
         <button onClick={() => dispatch(incrementMySlice(2))}>increment</button>
       </div>
+      <button
+        type="button"
+        style={{
+          display: 'block',
+          marginRight: 'auto',
+          marginLeft: 'auto',
+          fontSize: 12,
+          color: '#010101',
+        }}
+        onClick={() => dispatch(update(2))}
+      >
+        Clics {storeClics}
+      </button>
     </>
   );
 };

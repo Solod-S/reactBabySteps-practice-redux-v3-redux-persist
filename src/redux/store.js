@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createAction, createReducer, createSlice } from '@reduxjs/toolkit';
 import { userSlice } from './userSlice';
+import { clickSlice } from './userSliceReduxPersist';
 
 const myValueSlice = createSlice({
   name: 'myValueSlice',
@@ -70,6 +71,7 @@ export const store = configureStore({
     items: myItems,
     itemSlice: myItemSlice.reducer,
     userSlice: userSlice.reducer,
+    click: clickSlice.reducer,
   },
 });
 // за свойство myValue отвечает редюсер myReducer
