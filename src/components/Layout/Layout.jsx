@@ -7,14 +7,14 @@ import {
   incrementMySlice,
   decrementMySlice,
 } from 'redux/store';
-import { update } from 'redux/userSliceReduxPersist';
+import { update, storeClicsValue } from 'redux/userSliceReduxPersist';
 const Layout = () => {
   const dispatch = useDispatch();
   const value = useSelector(state => state.myValue);
-  const storeClics = useSelector(state => state.click.clicks);
-  console.log(`storeClics`, storeClics);
+  const storeClics = useSelector(storeClicsValue);
+  // console.log(`storeClics`, storeClics);
   const valueSlice = useSelector(state => state.myValueSlice);
-  console.log('layout', value);
+  // console.log('layout', value);
 
   return (
     <>

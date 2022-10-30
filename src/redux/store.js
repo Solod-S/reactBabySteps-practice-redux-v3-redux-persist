@@ -1,21 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createAction, createReducer, createSlice } from '@reduxjs/toolkit';
 import { userSlice } from './userSlice';
-import { clickSlice } from './userSliceReduxPersist';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import { persisteClickdReducer } from './userSliceReduxPersist';
 
-const persistConfig = {
-  key: 'clicks',
-  storage,
-  // blacklist: ['clicks'],
-  // если хочу исключить store.reducer.click
-  //whitelist: ['clicks']
-  // если хочу сохранять только store.reducer.click
-};
-
-const persisteClickdReducer = persistReducer(persistConfig, clickSlice.reducer);
-
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+// для игнора на прослойке (между отправкой в редюсер)
 const myValueSlice = createSlice({
   name: 'myValueSlice',
   initialState: 11,
@@ -42,6 +40,12 @@ const myItemSlice = createSlice({
       return state.filter(item => item.id !== action.payload.id);
     },
   },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export const { addMySlice, removeMySlice } = myItemSlice.actions;
@@ -86,6 +90,14 @@ export const store = configureStore({
     userSlice: userSlice.reducer,
     click: persisteClickdReducer,
   },
+  //---------решение ошибки в редакс персист
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+  //---------решение ошибки в редакс персист (прослайка на єтапе отправки екшена в редюсер игнорит методі персиста которые стреляют ошибку)
 });
 // за свойство myValue отвечает редюсер myReducer
 
